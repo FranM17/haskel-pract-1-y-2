@@ -5,19 +5,20 @@ eval (Num n) = n
 eval (Prod a b) = eval a * eval b
 eval (Div a b) = if eval b == 0 then 0 else eval a `div` eval b
 
+
 safeEval :: Aexp -> Maybe Int
 safeEval (Num n) = Just n
-safeEval (Prod a b) = do
-    x <- safeEval a
-    y <- safeEval b
-    return (x * y)
-safeEval (Div a b) = do
-    x <- safeEval a
-    y <- safeEval b
-    if y == 0 then Nothing else Just (x `div` y)
+safeEval (Prod a b) = case (safeEval a, safeEval b) of
+    (Just x, Just y) -> Just (x * y)
+    _ -> Nothing
+safeEval (Div a b) = case (safeEval a, safeEval b) of   
+    (Just x, Just 0) -> Nothing
+    (Just x, Just y) -> Just (x `div` y)
+    _ -> Nothing
 
-{-2-}
-{-Defina una funci´on que reciba un ´arbol binario de enteros y devuelva la suma de los nodos
+
+
+
 {-Definir una funci´on fromOrdList :: [a ] -> RBT a, que cree un red black tree a partir de una
 lista ordenada sin elementos repetidos. La funci´on debe ser de orden O(n).
 9. La funci´on insert dada en teor´ıa para insertar un elemento en un rb0-}
@@ -71,6 +72,9 @@ member a (T _ l b r)
                         | a < b = member a l
                         | a > b = member a r
 
+{-el peor caso es cuando no encontramos un nodo-}
+
+
 menAux :: Ord a => a -> RBT a -> Bool   
 menAux a E = False
 menAux a (T _ l b r)
@@ -81,3 +85,15 @@ menAux a (T _ l b r)
         menAux' candidate a (T _ l b r)
             | a < b =  menAux' candidate a l
             | otherwise =  menAux' b a r
+
+
+men c x E = c == x
+men c x (n l y r)
+                | x>y = men c x r
+                |otherwise = men y x l 
+
+{-memeber x t@(n l c r) = men c x t-}
+{-este alg se usa cuando tenemos mas casos de eementos q no estan que
+elementos q si estan, mejorar el peor caso.cuando la mejora es por una cte
+no hay taaaaaaaanta mejora, no es mejora sustancia, funciona cuando la altura 
+es pequeña, no es un arbol muy grande. -}
