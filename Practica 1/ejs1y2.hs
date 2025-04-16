@@ -16,5 +16,5 @@ Por ejemplo: collect [(3, 7),(2, 6),(1, 8),(3, 5),
 
 collect :: Eq k => [(k, v)] -> [(k, [v])]
 collect [] = []
-collect ((k, v):xs) = (k, [v] ++ [v' | (k', v') <- xs, k' == k]) 
-                      : collect [(k', v') | (k', v') <- xs, k' /= k]
+coll [] = []
+coll ((k, v):xs) = (k, v:[v' | (k', v') <- xs, k' == k]) : coll [(k', v') | (k', v') <- xs, k' /= k]
