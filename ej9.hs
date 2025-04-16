@@ -8,5 +8,6 @@ sub´arboles izquierdo y derecho respectivamente.-}
 
 insert :: Ord a => a → Bin a → Bin a
 insert a Hoja = Nodo Hoja a Hoja
-insert a (Nodo l b r ) | a 6 b = Nodo (insert a l) b r
-| otherwise = Nodo l b (insert a r )
+insert a (Nodo l b r ) 
+        | a 6 b = Nodo (insert a l) b r
+        | otherwise = Nodo l b (insert a r )

@@ -50,10 +50,40 @@ fromOrdList :: Ord a => [a] -> RBT a
 fromOrdList [] = E
 fromOrdList xs = go xs E
     where
-        go [] t = t
+        go [] t = t 
         go (x:xs) t = go xs (insert x t)
 
-{-7-}
+{-del profe, a chekiar y correr-}
+{-RBT: arbol ordenado de busqueda y balanceado, (altura log n base 2 de n)-}
+{-se busca que se vaya armando desde el medio-}
+fList :: Ord a => [a] -> RBT a 
+flist [] c = E
+flist (x:xs) c = let m = div (length xs) 2
+                x = xs !! m {-(!!): busca una posicion-}
+                ant = take m xs {-(take): toma m cantidad d elementos de m-}
+                pos = drop (m-1) xs {-(drop): descarta los 1ros m-1 elementos-}
+                c' = if c = R then B else R
+                in N (fList ant) m (fList pos)
+
+{-la razi necesariamente siempre va a ser NEGRA, para no romper la 
+invariante de q los hijos rojos tienen padres negros, si la raiz
+fuera roja, no tendria padre, PARA SOLUCIONAR ESTE PROBLEMA SE
+USA MAKEBLACK-}
+
+{-si la altura en RBT es impar, empieza en negro
+si la altura es par, empieza con rojo-}
+
+fromList xs | even (logbase 2 (length xs)) = flist xs R
+            | otherwise = fList xs B
+{-en este caso no usamos makeblack pq lo hacemos B en otherwise-}
+
+{-el log no va a ser entero, entoncs el fromList va  ser:-}
+truncate(logbase 2 (fromIntegral(length xs))) {-asi se pondria para q no de error-}
+
+
+
+
+{-7-}   
 {-La definici´on de member dada en teor´ıa (la cual determina si un elemento est´a en un bst)
 realiza en el peor caso 2 ∗ d comparaciones, donde d es la altura del ´arbol. Dar una definici´on
 de menber que realice a lo sumo d + 1 comparaciones.
